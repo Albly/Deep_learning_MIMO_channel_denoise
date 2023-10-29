@@ -19,7 +19,7 @@ def train_model(model,cfg,epochs, trainLoader, testLoader, optimizer, scheduler,
 
     for epoch in range(epochs):
         for train_signal, test_signal in zip(trainLoader, cycle(testLoader)):
-            train_noise = get_noise(signal = train_signal, SNR = 0)
+            train_noise = get_noise(signal = train_signal, SNR = -10)
             train_signal, train_noise  = train_signal.to(device), train_noise.to(device)
 
             optimizer.zero_grad()
@@ -40,7 +40,7 @@ def train_model(model,cfg,epochs, trainLoader, testLoader, optimizer, scheduler,
 
             model.eval()
 
-            test_noise = get_noise(signal = test_signal, SNR = 0)
+            test_noise = get_noise(signal = test_signal, SNR = -10)
             test_signal, test_noise = test_signal.to(device), test_noise.to(device)
 
             with torch.no_grad():

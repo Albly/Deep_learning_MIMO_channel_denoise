@@ -6,7 +6,7 @@ import torch
 from IPython import display
 import matplotlib.pyplot as plt
 
-plt.rcParams.update({'font.size': 22})
+plt.rcParams.update({'font.size': 15})
 
 
 def plot4d(data, th = 0.0):
