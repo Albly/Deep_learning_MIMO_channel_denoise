@@ -1,7 +1,16 @@
 import torch
 import scipy.io
 import mat73
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import Dataset
+
+
+def get_noise(signal, SNR = -16):
+    signal_power = torch.mean(torch.abs(signal)**2)
+    noise_power = signal_power * 10**(-SNR/10)
+    noise_var = torch.sqrt(noise_power/2)
+    noise =  noise_var*torch.randn(signal.shape) + 1j*noise_var*torch.randn(signal.shape) 
+    return noise.type(torch.complex64)
+
 
 class MAT_Dataset(Dataset):
     def __init__(self, path : str, 
@@ -16,7 +25,7 @@ class MAT_Dataset(Dataset):
         elif method == 'mat73':
             mat = mat73.loadmat(path)
 
-        self.UEs = UEs
+        self.UEs = UEs        
         self.N_UE = len(self.UEs)
         self.H = torch.tensor([], dtype = torch.complex64)
         self.is_normalize = is_normalize
@@ -25,7 +34,7 @@ class MAT_Dataset(Dataset):
             H_tmp = torch.from_numpy(mat['Hfrq'][0, ue][0,0][0])
             self.H = torch.concat((self.H, H_tmp), dim = -1)
         
-        self.H = torch.permute(self.H, [3, 0 , 1, 2])
+        self.H = torch.permute(self.H, [3, 0 , 1, 2]).type(torch.complex64)
         
         
     def __len__(self):
@@ -43,6 +52,6 @@ class MAT_Dataset(Dataset):
         if self.is_normalize:
             data = self.normalize_power(data)
         
-        data = torch.unsqueeze(data,0)
+        #data = torch.unsqueeze(data,0)
         
         return data  

@@ -3,6 +3,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.pylab as pll
 import torch
+from IPython import display
+import matplotlib.pyplot as plt
+
+plt.rcParams.update({'font.size': 22})
+
 
 def plot4d(data, th = 0.0):
     data = data.numpy()
@@ -96,3 +101,22 @@ def plot4d(data, th = 0.0):
     ax.set_zlabel('delay', fontsize = 15)
     plt.tick_params(axis='both', labelsize=13)
     plt.tight_layout()
+
+def display_losses(train_loss_hist, test_loss_hist, train_info_loss, test_info_loss):
+    display.clear_output(wait=True)
+    plt.figure(figsize = (16,6))
+    plt.subplot(1,2,1)
+    plt.title("training loss")
+    plt.xlabel("#iteration")
+    plt.semilogy(train_loss_hist, 'b', label='train')
+    plt.semilogy(test_loss_hist, 'r', label ='test')
+    plt.legend()
+    
+    plt.subplot(1,2,2)
+    plt.title('Signal loss')
+    plt.xlabel('iteration')
+    plt.ylabel('MSE')
+    plt.semilogy(train_info_loss, 'b', label = 'train')
+    plt.semilogy(test_info_loss, 'r', label = 'test')
+    plt.legend()
+    plt.show();
