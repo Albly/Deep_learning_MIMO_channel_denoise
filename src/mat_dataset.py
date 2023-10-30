@@ -15,7 +15,7 @@ def get_noise(signal, SNR = -16):
 class MAT_Dataset(Dataset):
     def __init__(self, path : str, 
                        UEs : list,
-                       is_normalize : bool = True, 
+                       is_normalize : bool = False, 
                        method : str = 'scipy'):
         # dataset path
         self.imgs_path = path
@@ -52,6 +52,30 @@ class MAT_Dataset(Dataset):
         if self.is_normalize:
             data = self.normalize_power(data)
         
-        #data = torch.unsqueeze(data,0)
-        
         return data  
+
+class EVAL_Dateset(Dataset):
+    def __init__(self, path: str,
+                 normalize : False,
+                 method : str = 'scipy'):
+        self.path = path
+
+        if method == 'scipy':
+            mat = scipy.io.loadmat(path)
+        elif method == 'mat73':
+            mat = mat73.loadmat(path)
+        
+        self.H = torch.from_numpy(mat['H']).type(torch.complex64)
+        self.N = torch.from_numpy(mat['Noise']).type(torch.complex64)
+        self.norma = []
+    
+    
+    def __len__(self):
+        return self.H.shape[0]
+    
+
+    def __getitem__(self, idx):
+        data = self.H[idx]
+        noise = self.N[idx]
+        return data, noise
+

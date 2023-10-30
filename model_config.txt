@@ -1,0 +1,1 @@
+{"N_hor": 8, "N_ver": 4, "N_pol": 2, "N_subc": 612, "N_UE_ANT": 4, "N_Az": 64, "N_El": 32, "N_time": 1024, "window_cut": [32, 16, 70]}
