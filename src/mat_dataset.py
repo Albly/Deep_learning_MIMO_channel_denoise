@@ -35,7 +35,7 @@ class MAT_Dataset(Dataset):
             self.H = torch.concat((self.H, H_tmp), dim = -1)
         
         self.H = torch.permute(self.H, [3, 0 , 1, 2]).type(torch.complex64)
-        
+        #self.H = self.H * 2**8
         
     def __len__(self):
         return self.H.shape[0]
@@ -56,7 +56,6 @@ class MAT_Dataset(Dataset):
 
 class EVAL_Dateset(Dataset):
     def __init__(self, path: str,
-                 normalize : False,
                  method : str = 'scipy'):
         self.path = path
 
@@ -66,7 +65,7 @@ class EVAL_Dateset(Dataset):
             mat = mat73.loadmat(path)
         
         self.H = torch.from_numpy(mat['H']).type(torch.complex64)
-        self.N = torch.from_numpy(mat['Noise']).type(torch.complex64)
+        self.N = torch.from_numpy(mat['N']).type(torch.complex64)
         self.norma = []
     
     

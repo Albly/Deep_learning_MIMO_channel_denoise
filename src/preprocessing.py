@@ -22,7 +22,7 @@ class AntFreq2BeamTime_3D(torch.nn.Module):
        [N_batch x N_channel x N_ants x N_subc] --> reshaping into 
        [N_batch x N_channels x n_hor x n_ver x n_pol x n_subc] --> FFT 
        [N_batch x N_channels x n_azimuth x n_elevation x n_pol x n_delay]
-        '''
+    '''
     def __init__(self, n_hor = 8, n_ver = 4, n_pol = 2, out_size = (64,32,256)):
         super(AntFreq2BeamTime_3D, self).__init__()
         self.n_hor = n_hor
@@ -143,9 +143,9 @@ class CenterCut2(torch.nn.Module):
             Ps = torch.reshape(Powers, (x_b, -1))
             d,h,w = unravel_index(torch.argmax(Ps, dim = 1), (x_d, x_h, x_w))
             
-            self.s_d = x_dc*torch.ones_like(d) - d                      # shifts 
-            self.s_h = x_hc*torch.ones_like(h) - h
-            self.s_w = x_wc*torch.ones_like(w) - w
+            self.s_d = x_dc * torch.ones_like(d) - d                      # shifts 
+            self.s_h = x_hc * torch.ones_like(h) - h
+            self.s_w = x_wc * torch.ones_like(w) - w
             
             for i in range(x_b):
                 x[i] = torch.roll(x[i], shifts = (self.s_d[i], self.s_h[i], self.s_w[i]), dims = (-3,-2,-1))
