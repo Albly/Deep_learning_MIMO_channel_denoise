@@ -15,5 +15,6 @@ def complex_LOG_MSE(x_real, x_hat):
 
     assert x_real.shape == x_hat.shape, 'Sizes of both values must be the same, but got {0} and {1} instead'.format(x_real.shape, x_hat.shape)
     
-    mlse = torch.mean(10*torch.log10(torch.abs(x_real-x_hat)**2))
+    eps = torch.tensor([0.0000001])
+    mlse = torch.mean(10*torch.log10(torch.abs(x_real-x_hat)**2 + eps))
     return mlse
