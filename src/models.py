@@ -82,16 +82,16 @@ class DnCNN3D(nn.Module):
         
         super(DnCNN3D, self).__init__()
         kernel_size = 3
-        padding = 1
         features = num_features
         layers = []
-        layers.append(nn.Conv3d(in_channels=channels, out_channels=features, kernel_size=kernel_size,padding = padding, bias = True, padding_mode='circular'))
+        layers.append(nn.Conv3d(in_channels=channels, out_channels=features, kernel_size=kernel_size,padding = 'same', bias = True, padding_mode='circular'))
         layers.append(nn.ReLU(inplace=True))
-        for _ in range(num_of_layers-2):
-            layers.append(nn.Conv3d(in_channels=features, out_channels=features, kernel_size=kernel_size, padding=padding, bias=True, padding_mode='circular'))
+        for i in range(num_of_layers-2):
+            dill = 3 if i%2 == 0 else 1
+            layers.append(nn.Conv3d(in_channels=features, out_channels=features, kernel_size=kernel_size, padding='same', bias=True, dilation = dill,  padding_mode='circular'))
             layers.append(nn.BatchNorm3d(features))
             layers.append(nn.ReLU(inplace=True))
-        layers.append(nn.Conv3d(in_channels=features, out_channels=channels, kernel_size=kernel_size, padding=padding, bias=True, padding_mode='circular'))
+        layers.append(nn.Conv3d(in_channels=features, out_channels=channels, kernel_size=kernel_size, padding = 'same', bias=True, padding_mode='circular'))
         self.dncnn = nn.Sequential(*layers)
 
         if apply_kaiming:
