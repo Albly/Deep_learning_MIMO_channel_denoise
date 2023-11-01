@@ -4,10 +4,10 @@ from src.preprocessing import AntFreq2BeamTime_3D, BeamDelay2AntFreq_3D, Pol2Dim
 from src.plotting import project3d
 from itertools import cycle
 from src.plotting import project3d , display_losses 
-from src.mat_dataset import get_noise
+from src.mat_dataset import gen_noise
 
 
-def train_model(model,cfg,epochs, trainLoader, testLoader, optimizer, scheduler, criterion):
+def train_model(model,cfg,epochs, trainLoader, testLoader, optimizer, scheduler, criterion, SNR):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     
     prev_val_loss = 10000000
@@ -19,7 +19,7 @@ def train_model(model,cfg,epochs, trainLoader, testLoader, optimizer, scheduler,
 
     for epoch in range(epochs):
         for train_signal, test_signal in zip(trainLoader, cycle(testLoader)):
-            train_noise = get_noise(signal = train_signal, SNR = -5)
+            train_noise = gen_noise(signal = train_signal, SNR = SNR)
             train_signal, train_noise  = train_signal.to(device), train_noise.to(device)
 
             optimizer.zero_grad()
@@ -40,7 +40,7 @@ def train_model(model,cfg,epochs, trainLoader, testLoader, optimizer, scheduler,
 
             model.eval()
 
-            test_noise = get_noise(signal = test_signal, SNR = -5)
+            test_noise = gen_noise(signal = test_signal, SNR = SNR)
             test_signal, test_noise = test_signal.to(device), test_noise.to(device)
 
             with torch.no_grad():

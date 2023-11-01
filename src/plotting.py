@@ -6,7 +6,7 @@ import torch
 from IPython import display
 import matplotlib.pyplot as plt
 
-plt.rcParams.update({'font.size': 15})
+plt.rcParams.update({'font.size': 18})
 
 
 def plot4d(data, th = 0.0):
@@ -58,25 +58,26 @@ def plot4d_3x(data1, data2, data3, th = (0.0, 0.0, 0.0), titles= ('Spatial spect
 
 
 def project3d(x):
+    PAD = 0.25
     s = torch.abs(x[0,0,:,:,:,:])
-    s = torch.roll(s, shifts = 128, dims = -1)
-    plt.figure(figsize = (15,10))
+    s = torch.roll(s, shifts = 0, dims = -1)
+    plt.figure(figsize = (19,13))
     am_az = torch.mean(s,dim = 0)
     am_el = torch.mean(s, dim = 1)
     am_time = torch.mean(s, dim = 3)
-    plt.subplot(3,2,1); plt.imshow(am_az[:,0,:], cmap = 'jet'); plt.xlabel('Time'); plt.ylabel('Elevation');
-    plt.colorbar(orientation="horizontal", pad=0.16); plt.title('1-pol') 
-    plt.subplot(3,2,2); plt.imshow(am_az[:,1,:], cmap = 'jet'); plt.xlabel('Time'); plt.ylabel('Elevation');
-    plt.colorbar(orientation="horizontal", pad=0.16); plt.title('2-pol')
-    plt.subplot(3,2,3); plt.imshow(am_el[:,0,:], cmap = 'jet'); plt.xlabel('Time');
-    plt.ylabel('Azimuth'); plt.colorbar(orientation="horizontal", pad=0.16); plt.title('1-pol')
-    plt.subplot(3,2,4); plt.imshow(am_el[:,1,:], cmap = 'jet'); plt.xlabel('Time'); plt.ylabel('Azimuth'); 
-    plt.colorbar(orientation="horizontal", pad=0.16); plt.title('2-pol')
-    plt.subplot(3,2,5); plt.imshow(am_time[:,:,0].T, cmap = 'jet'); plt.xlabel('Azimuth'); plt.ylabel('Elevation'); 
-    plt.colorbar(orientation="horizontal", pad=0.16); plt.title('1-pol')
-    plt.subplot(3,2,6); plt.imshow(am_time[:,:,1].T, cmap = 'jet'); plt.xlabel('Azimuth'); plt.ylabel('Elevation');
-    plt.colorbar(orientation="horizontal", pad=0.16); plt.title('2-pol')
-    plt.tight_layout()
+    plt.subplot(3,2,1); plt.imshow(am_az[:,0,:], cmap = 'jet'); plt.xlabel('Time'); plt.ylabel('Elevation'); plt.gca().set_aspect('auto'); plt.xlim([450,650]);
+    plt.colorbar(orientation="horizontal", pad=PAD); plt.title('1-pol') 
+    plt.subplot(3,2,2); plt.imshow(am_az[:,1,:], cmap = 'jet'); plt.xlabel('Time'); plt.ylabel('Elevation');plt.gca().set_aspect('auto'); plt.xlim([450,650]);
+    plt.colorbar(orientation="horizontal", pad=PAD); plt.title('2-pol');
+    plt.subplot(3,2,3); plt.imshow(am_el[:,0,:], cmap = 'jet'); plt.xlabel('Time'); plt.gca().set_aspect('auto'); plt.xlim([450,650]);
+    plt.ylabel('Azimuth'); plt.colorbar(orientation="horizontal", pad=PAD); plt.title('1-pol')
+    plt.subplot(3,2,4); plt.imshow(am_el[:,1,:], cmap = 'jet'); plt.xlabel('Time'); plt.ylabel('Azimuth'); plt.gca().set_aspect('auto'); plt.xlim([400,650]);
+    plt.colorbar(orientation="horizontal", pad=PAD); plt.title('2-pol')
+    plt.subplot(3,2,5); plt.imshow(am_time[:,:,0].T, cmap = 'jet'); plt.xlabel('Azimuth'); plt.ylabel('Elevation'); plt.gca().set_aspect('auto')
+    plt.colorbar(orientation="horizontal", pad=PAD); plt.title('1-pol')
+    plt.subplot(3,2,6); plt.imshow(am_time[:,:,1].T, cmap = 'jet'); plt.xlabel('Azimuth'); plt.ylabel('Elevation');plt.gca().set_aspect('auto')
+    plt.colorbar(orientation="horizontal", pad=PAD); plt.title('2-pol')
+    #plt.tight_layout()
 
 def plot4d(data, th = 0.0):
     data = data.numpy()
@@ -104,7 +105,7 @@ def plot4d(data, th = 0.0):
 
 def display_losses(train_loss_hist, test_loss_hist, train_info_loss, test_info_loss):
     display.clear_output(wait=True)
-    plt.figure(figsize = (16,6))
+    plt.figure(figsize = (18,6))
     plt.subplot(1,2,1)
     plt.title("training loss")
     plt.xlabel("#iteration")
