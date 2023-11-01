@@ -14,7 +14,7 @@ from torch.utils.data import Dataset
 
 def gen_noise(H, SNR):
     N_tti, N_ue_ant, N_bs, N_subc = H.shape[0], H.shape[1],H.shape[2], H.shape[3]
-    noise_SRS = torch.sqrt(0.5) * (torch.rand(N_tti, N_ue_ant, N_bs, N_subc) + 1j*torch.rand(N_tti, N_ue_ant, N_bs, N_subc))
+    noise_SRS = torch.sqrt(torch.tensor([0.5])) * (torch.rand(N_tti, N_ue_ant, N_bs, N_subc) + 1j*torch.rand(N_tti, N_ue_ant, N_bs, N_subc))
     gain = torch.sqrt(torch.mean(H * H.conj(), dim = -1).unsqueeze(-1).repeat(1,1,1,288))
     noise_SRS_normed = 10**(-SNR/20) * gain * noise_SRS
     return noise_SRS_normed
