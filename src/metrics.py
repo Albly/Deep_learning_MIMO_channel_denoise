@@ -18,3 +18,12 @@ def complex_LOG_MSE(x_real, x_hat):
     eps = torch.tensor([1.00], device= x_real.device)
     mlse = torch.mean(10*torch.log10(torch.abs(x_real-x_hat)**2 + eps))
     return mlse
+
+def NMSE(x_real, x_hat, x_noisy):
+    
+    mse_without_denoise = torch.mean(torch.abs(x_real - x_noisy)**2)
+    mse_with_denoise    = torch.mean(torch.abs(x_real - x_hat)**2)
+
+    nmse = mse_with_denoise / mse_without_denoise
+    
+    return nmse
